@@ -24,7 +24,7 @@ setup(
     description = "Babel localisation support for Torando",
     license = "BSD",
     keywords = "tornado locale babel localisation",
-    url = "",
+    url = "https://github.com/openlabs/tornado-babel",
     test_suite = "tests.test_all",
 
     entry_points="""
