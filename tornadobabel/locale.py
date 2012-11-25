@@ -16,6 +16,11 @@
     :copyright: (c) 2012 by Openlabs Technologies & Consulting (P) Limited
     :copyright: (c) 2009 by Facebook (Tornado Project)
     :license: BSD, see LICENSE for more details.
+
+    :changes:
+        12/11/23 - E. PASCUAL (Centre Scientifique et Technique du Batiment):
+            fixed implementation of translations merge process in 
+            load_gettext_translations
 """
 import gettext
 import logging
@@ -64,23 +69,18 @@ def load_gettext_translations(directory, domain):
     global _translations
     global _supported_locales
     global _use_gettext
-    _translations = {}
     for lang in os.listdir(directory):
         if lang.startswith('.'):
             continue  # skip .svn, etc
         if os.path.isfile(os.path.join(directory, lang)):
             continue
         try:
-            # Load existing translation or Null Translations
-            translation = _translations.get(lang, Translations.load())
-            if isinstance(translation, gettext.NullTranslations):
-                _translations[lang] = Translations.load(
-                        directory, [lang], domain
-                )
+            translation = Translations.load(directory, [lang], domain)
+            if lang in _translations:
+                _translations[lang].merge(translation)
             else:
-                _translations[lang].merge(
-                        Translations.load(directory, [lang], domain)
-                )
+                _translations[lang] = translation
+                
         except Exception, e:
             logging.error("Cannot load translation for '%s': %s", lang, str(e))
             continue
