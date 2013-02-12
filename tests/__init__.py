@@ -13,10 +13,12 @@ sys.path.append('../')
 
 from test_locale import TestLocale
 from test_extract import TestExtract
+from test_merge import TestMerge
 
 def test_all():
     loader = TestLoader()
     suite = TestSuite()
     suite.addTests(loader.loadTestsFromTestCase(TestLocale))
     suite.addTests(loader.loadTestsFromTestCase(TestExtract))
+    suite.addTests(loader.loadTestsFromTestCase(TestMerge))
     return suite
